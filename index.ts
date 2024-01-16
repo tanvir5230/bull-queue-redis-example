@@ -1,11 +1,14 @@
-import Queue from "bull";
+import express, { Request, Response } from "express";
+import { executeSampleJobs } from "./example";
 
-const queue = new Queue("myqueue");
+const app = express();
+const port = 6000;
 
-queue.add({ name: "John Doe" }, { delay: 4000 });
-queue.add({ name: "Tanvir Doe" });
+app.get("/", (req: Request, res: Response) => {
+  res.send("Hello world");
+  executeSampleJobs();
+});
 
-queue.process(async (job, done) => {
-  console.log(`Processing job: ${job.data.name}`);
-  done();
+app.listen(port, () => {
+  console.log(`[server]: Server is running at http://localhost:${port}`);
 });
